@@ -30,7 +30,7 @@ describe("Machine.Definition", () => {
       })
     })
 
-    it.skip("shows child state identifiers as completions", () => {
+    it("shows child state identifiers as completions", () => {
       useStateMachine({
         // @ts-expect-error
         initial: "  ",

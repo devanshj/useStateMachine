@@ -53,9 +53,9 @@ export namespace Machine {
               , "please add `on: {}` to state nodes that only have an `effect` property. "
               , "See the documentation to learn more."
               ]> :
-        [keyof A.Get<Self, "states">] extends [never]
-          ? A.CustomError<"Error: no states defined", A.Get<Self, "initial">>
-          : keyof A.Get<Self, "states">
+        [keyof A.Get<Self, "states", {}>] extends [never]
+          ? A.CustomError<"Error: no states defined", A.Get<Self, "initial", never>>
+          : keyof A.Get<Self, "states", {}>
       , states:
           { [StateIdentifier in keyof A.Get<Self, "states">]:
               StateIdentifier extends A.String
