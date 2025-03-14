@@ -16,7 +16,7 @@ async function generate (){
     "declare const global: any;",
     "declare const describe: any;",
     "declare const it: any;",
-    "declare const expect: any;"
+    "declare const expect: any;",
   ].join(EOL) + EOL;
 
   let twoSlashQueries = minimalTwoSlashQueries(twoslasher
@@ -27,11 +27,14 @@ async function generate (){
   let generatedSource =
     imports + EOL +
     "// @ts-ignore" + EOL +
-    "global.twoSlashQueries = getTwoSlashQueries()" + EOL +
+    "globalThis.twoSlashQueries = getTwoSlashQueries()" + EOL +
     body + EOL +
     `function getTwoSlashQueries() {
       return ${JSON.stringify(twoSlashQueries, null, "  ")}
     }`
+
+  let queryIndex = 0;
+  generatedSource = generatedSource.replace(/query\(\)/g, () => `(global as any).twoSlashQueries[${queryIndex++}]`);
 
   await fs.writeFile(
     path.join(TEST_DIR, TEST_FILENAME.replace("twoslash-", "")),
