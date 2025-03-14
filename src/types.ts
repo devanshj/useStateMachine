@@ -5,8 +5,8 @@ export type UseStateMachine =
   <D extends Machine.Definition<D>>(definition: A.InferNarrowestObject<D>) =>
     Machine<Machine.Definition.FromTypeParameter<D>>
 
-export const $$t = Symbol("$$t");
-type $$t = typeof $$t;
+export const $$t = Symbol("$$t")
+type $$t = typeof $$t
 export type CreateType = <T>() => { [$$t]: T }
 
 export type Machine<D,
@@ -145,7 +145,7 @@ export namespace Machine {
     
     type OnImpl = R.Of<Event.Impl["type"], Transition.Impl>
     export namespace On {
-      export type Impl = OnImpl;
+      export type Impl = OnImpl
     }
 
     export type Transition<D, P,
@@ -188,7 +188,7 @@ export namespace Machine {
           | void
           | ((parameter: EffectParameter.Cleanup.Impl) => void)
     export namespace Effect {
-      export type Impl = EffectImpl;  
+      export type Impl = EffectImpl  
     }
 
 
@@ -244,7 +244,7 @@ export namespace Machine {
       }
 
     export type ExhaustiveIdentifier = "$$exhaustive"
-    export type InitialEventType = "$$initial";
+    export type InitialEventType = "$$initial"
   }
 
   export type State<D> =
@@ -255,7 +255,7 @@ export namespace Machine {
 
   type StateImpl = string & A.Tag<"Machine.State">
   export namespace State {
-    export type Impl = StateImpl;
+    export type Impl = StateImpl
   }
   
   export type Context<D> =
@@ -263,7 +263,7 @@ export namespace Machine {
 
   type ContextImpl = {} & A.Tag<"Machine.Context">
   export namespace Context {
-    export type Impl = ContextImpl;
+    export type Impl = ContextImpl
   }
 
   export type Event<D, EventsSchema = A.Get<D, ["schema", "events"], {}>> = 
@@ -314,7 +314,7 @@ export namespace Machine {
       export type Impl = EffectParameter.Impl
     }
 
-    export type Impl = EffectParameterImpl;
+    export type Impl = EffectParameterImpl
   }
   export interface EffectParameterImpl
     { event: Event.Impl
@@ -387,7 +387,7 @@ export namespace Machine {
     | Event.Impl["type"]
     | Event.Impl
   export namespace Sendable {
-    export type Impl = SendableImpl;  
+    export type Impl = SendableImpl  
   }
 
   export type Send<D> =
@@ -397,7 +397,7 @@ export namespace Machine {
 
   type SendImpl = (send: Sendable.Impl) => void
   export namespace Send {
-    export type Impl = SendImpl;
+    export type Impl = SendImpl
   }
 
   export type SetContext<D> =
@@ -406,7 +406,7 @@ export namespace Machine {
   export type SetContextImpl =
     (context: ContextUpdater.Impl) => { send: Send.Impl }
   export namespace SetContext {
-    export type Impl = SetContextImpl;
+    export type Impl = SetContextImpl
   }
 
   export type ContextUpdater<D> =
@@ -415,15 +415,15 @@ export namespace Machine {
 
   type ContextUpdaterImpl = (context: Context.Impl) => Context.Impl
   export namespace ContextUpdater {
-    export type Impl = ContextUpdaterImpl;
+    export type Impl = ContextUpdaterImpl
   }
 }
 
 export namespace L {
-  export type Assert<T> = A.Cast<T, A.Tuple>;
+  export type Assert<T> = A.Cast<T, A.Tuple>
   export type Concat<A, B> = [...L.Assert<A>, ...L.Assert<B>]
-  export type Popped<A> = A extends [] ? [] : A extends [...infer X, any] ? X : never;
-  export type Pop<A> = A extends [] ? undefined : A extends [...any[], infer X] ? X : never; 
+  export type Popped<A> = A extends [] ? [] : A extends [...infer X, any] ? X : never
+  export type Pop<A> = A extends [] ? undefined : A extends [...any[], infer X] ? X : never 
 }
 export namespace LS {
   export type ConcatAll<L> =
@@ -434,32 +434,32 @@ export namespace LS {
 }
 
 export namespace S {
-  export type Assert<T> = A.Cast<T, A.String>;
+  export type Assert<T> = A.Cast<T, A.String>
   export type IsLiteral<T> =
     T extends A.String
       ? A.String extends T
           ? false
           : true
-      : false;
+      : false
 }
 
 export namespace U {
-  export type Extract<T, U> = T extends U ? T : never;
-  export type Exclude<T, U> = T extends U ? never : T;
+  export type Extract<T, U> = T extends U ? T : never
+  export type Exclude<T, U> = T extends U ? never : T
 }
 
 export namespace O {
-  export type Value<T> = T[keyof T];
+  export type Value<T> = T[keyof T]
   export type ShallowClean<T> = { [K in keyof T]: T[K] }
   export type OmitKey<T, K extends keyof T> = { [P in U.Exclude<keyof T, K>]: T[P] }
 }
 
 export namespace A {
-  export type Cast<T, U> = T extends U ? T : U;
-  export type Tuple<T = any> = T[] | [T];
-  export type Object = object;
-  export type String = string;
-  export type Function = (...args: any[]) => any;
+  export type Cast<T, U> = T extends U ? T : U
+  export type Tuple<T = any> = T[] | [T]
+  export type Object = object
+  export type String = string
+  export type Function = (...args: any[]) => any
 
   export type InferNarrowest<T> =
     T extends any
@@ -475,17 +475,17 @@ export namespace A {
   export type AreEqual<A, B> =
     (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0)
       ? true
-      : false;
+      : false
 
   export type DoesExtend<A, B> =
-    A extends B ? true : false;
+    A extends B ? true : false
 
   export type IsUnknown<T> =
     [T] extends [never]
       ? false
       : T extends unknown ? unknown extends T
           ? true
-          : false : false;
+          : false : false
 
   export type IsPlainObject<T> =
     T extends A.Object
@@ -540,11 +540,11 @@ export namespace A {
     | Generator
 
   export type Uninstantiated<T> = T & { [$$uninstantiated]: true }
-  declare const $$uninstantiated: unique symbol;
+  declare const $$uninstantiated: unique symbol
 
   export type Tag<N extends A.String> =
     { [_ in N]: void }
 
-  export const test = (_o: true) => {};
+  export const test = (_o: true) => {}
   export const areEqual = <A, B>(_debug?: (value: A) => void) => undefined as any as A.AreEqual<A, B>
 }
