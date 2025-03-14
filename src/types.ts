@@ -43,27 +43,22 @@ interface MachineImpl
 export namespace Machine {
   export type Impl = MachineImpl
 
-  export type Definition<
-    Self,
-    States = A.Get<Self, "states">,
-    ContextSchema = A.Get<Self, ["schema", "context", $$t]>,
-    HasContextSchema = Self extends { schema: { context: unknown } } ? true : false
-  > =
+  export type Definition<Self> =
     & { initial:
-        A.IsUnknown<States> extends true
+        A.IsUnknown<A.Get<Self, "states">> extends true
           ? LS.ConcatAll<
               [ "Oops you have met a TypeScript limitation, "
               , "please add `on: {}` to state nodes that only have an `effect` property. "
               , "See the documentation to learn more."
               ]> :
-        [keyof States] extends [never]
+        [keyof A.Get<Self, "states">] extends [never]
           ? A.CustomError<"Error: no states defined", A.Get<Self, "initial">>
-          : keyof States
+          : keyof A.Get<Self, "states">
       , states:
-          { [StateIdentifier in keyof States]:
+          { [StateIdentifier in keyof A.Get<Self, "states">]:
               StateIdentifier extends A.String
                 ? Definition.StateNode<Self, ["states", StateIdentifier]>
-                : A.CustomError<"Error: Only string identifiers allowed", States[StateIdentifier]>
+                : A.CustomError<"Error: Only string identifiers allowed", A.Get<Self, "states">[StateIdentifier]>
           }
       , on?: Definition.On<Self, ["on"]>
       , schema?: Definition.Schema<Self, ["schema"]>
@@ -75,11 +70,14 @@ export namespace Machine {
             A.Get<Self, "$$internalIsConstraint">
           >
       }
-    & ( ContextSchema extends undefined
+    & ( A.Get<Self, ["schema", "context", $$t]> extends infer ContextSchema ?
+        (Self extends { schema: { context: unknown } } ? true : false) extends infer HasContextSchema ?
+        ContextSchema extends undefined
           ? HasContextSchema extends true
               ? { context?: undefined }
               : { context?: unknown }
           : { context: ContextSchema }
+        : never : never
       )
 
   interface DefinitionImp
