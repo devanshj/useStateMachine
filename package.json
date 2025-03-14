@@ -22,7 +22,8 @@
     "size": "size-limit",
     "start": "dts watch",
     "test": "dts test",
-    "pretest": "node twoslash-tester/generate"
+    "pretest": "node twoslash-tester/generate",
+    "postinstall": "patch-package"
   },
   "peerDependencies": {
     "react": ">=16.8.0"
@@ -41,6 +42,7 @@
     "dts-cli": "^2.0.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.4",
+    "patch-package": "^8.0.0",
     "react": ">=16.8.0",
     "react-test-renderer": "^17.0.1",
     "size-limit": "^7.0.5",

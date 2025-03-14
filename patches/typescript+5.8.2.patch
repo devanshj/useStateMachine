@@ -1,0 +1,12 @@
+diff --git a/node_modules/typescript/lib/typescript.js b/node_modules/typescript/lib/typescript.js
+index dc0fe9a..172be31 100644
+--- a/node_modules/typescript/lib/typescript.js
++++ b/node_modules/typescript/lib/typescript.js
+@@ -153151,6 +153151,7 @@ function getSymbolAtLocationForQuickInfo(node, checker) {
+   return checker.getSymbolAtLocation(node);
+ }
+ function getPropertySymbolsFromContextualType(node, checker, contextualType, unionSymbolOk) {
++  contextualType = contextualType.getNonNullableType()
+   const name = getNameFromPropertyName(node.name);
+   if (!name) return emptyArray;
+   if (!contextualType.isUnion()) {
