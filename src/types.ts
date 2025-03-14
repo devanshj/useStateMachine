@@ -44,6 +44,8 @@ export namespace Machine {
   export type Impl = MachineImpl
 
   export type Definition<Self> =
+    // doing the following breaks the types
+    // A.Get<Self, "states"> extends infer States ? ... : never
     & { initial:
         A.IsUnknown<A.Get<Self, "states">> extends true
           ? LS.ConcatAll<
