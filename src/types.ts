@@ -340,31 +340,31 @@ export namespace Machine {
     }
 
   export type EntryEventForState<D, State> =
-  | ( State extends InitialState<D>
-        ? { type: Definition.InitialEventType }
-        : never
-    )
-  | U.Extract<
-      Event<D>,
-      { type:
-          | O.Value<{ [S in keyof A.Get<D, "states">]:
-              O.Value<{ [E in keyof A.Get<D, ["states", S, "on"]>]:
-                A.Get<D, ["states", S, "on", E]> extends infer T
+    | ( State extends InitialState<D>
+          ? { type: Definition.InitialEventType }
+          : never
+      )
+    | U.Extract<
+        Event<D>,
+        { type:
+            | O.Value<{ [S in keyof A.Get<D, "states">]:
+                O.Value<{ [E in keyof A.Get<D, ["states", S, "on"]>]:
+                  A.Get<D, ["states", S, "on", E]> extends infer T
+                    ? (T extends A.String ? T : A.Get<T, "target">) extends State
+                        ? E
+                        : never
+                    : never
+                }>
+              }>
+            | O.Value<{ [E in keyof A.Get<D, ["on"]>]:
+                A.Get<D, ["on", E]> extends infer T
                   ? (T extends A.String ? T : A.Get<T, "target">) extends State
                       ? E
                       : never
                   : never
               }>
-            }>
-          | O.Value<{ [E in keyof A.Get<D, ["on"]>]:
-              A.Get<D, ["on", E]> extends infer T
-                ? (T extends A.String ? T : A.Get<T, "target">) extends State
-                    ? E
-                    : never
-                : never
-            }>
-      }
-    >
+        }
+      >
 
   export type ExitEventForState<D, State> =
     U.Extract<
