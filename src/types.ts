@@ -12,7 +12,7 @@ export type CreateType = <T>() => { [$$t]: T }
 export type Machine<D,
   State = Machine.State<D>,
   NextEvents =
-    ( State extends any
+    ( State extends unknown
         ? A.Get<Machine.ExitEventForState<D, State>, "type">
         : never
     )[]
@@ -21,7 +21,7 @@ export type Machine<D,
       { nextEvents: NextEvents
       , send: Machine.Send<D>
       }>
-    & ( State extends any
+    & ( State extends unknown
           ? A.Instantiated<
             { state: State
             , context: Machine.Context<D>
@@ -269,7 +269,7 @@ export namespace Machine {
   export type Event<D, EventsSchema = A.Get<D, ["schema", "events"], {}>> = 
     | O.Value<{ [T in U.Exclude<keyof EventsSchema, Definition.ExhaustiveIdentifier>]:
         A.Get<EventsSchema, [T, $$t]> extends infer P
-          ? P extends any ? O.ShallowClean<{ type: T } & P> : never
+          ? P extends unknown ? O.ShallowClean<{ type: T } & P> : never
           : never
       }>
     | ( A.Get<EventsSchema, Definition.ExhaustiveIdentifier, false> extends true ? never :
@@ -277,15 +277,15 @@ export namespace Machine {
             { [S in keyof A.Get<D, "states">]:
                 keyof A.Get<D, ["states", S, "on"]>
             }> extends infer EventType
-              ? EventType extends any ? { type: EventType } : never
+              ? EventType extends unknown ? { type: EventType } : never
             : never
           )
         | ( keyof A.Get<D, "on"> extends infer EventType
-              ? EventType extends any ? { type: EventType } : never
+              ? EventType extends unknown ? { type: EventType } : never
               : never
           )
         ) extends infer InferredEvent
-          ? InferredEvent extends any
+          ? InferredEvent extends unknown
               ? A.Get<InferredEvent, "type"> extends keyof EventsSchema ? never :
                 A.Get<InferredEvent, "type"> extends Definition.ExhaustiveIdentifier ? never :
                 A.Get<InferredEvent, "type"> extends Definition.InitialEventType ? never :
@@ -376,7 +376,7 @@ export namespace Machine {
     >
 
   export type Sendable<D, E = Event<D>> =
-    | ( E extends any
+    | ( E extends unknown
           ? { type: A.Get<E, "type"> } extends E
               ? A.Get<E, "type">
               : never
@@ -462,7 +462,7 @@ export namespace A {
   export type Function = (...args: any[]) => any
 
   export type InferNarrowest<T> =
-    T extends any
+    T extends any // T extends unknown doesnt work
       ? ( T extends A.Function ? T :
           T extends A.Object ? InferNarrowestObject<T> :
           T
@@ -504,7 +504,7 @@ export namespace A {
     never
 
   export type Get<T, P, F = undefined> =
-    (P extends any[] ? _Get<T, P, F> : _Get<T, [P], F>) extends infer X
+    (P extends unknown[] ? _Get<T, P, F> : _Get<T, [P], F>) extends infer X
       ? A.Cast<X, any>
       : never
 
@@ -518,7 +518,7 @@ export namespace A {
   export type Instantiated<T> =
     T extends Uninstantiated<infer U> ? U : 
     T extends Builtin ? T :
-    T extends any
+    T extends unknown
       ? T extends A.Function
           ? T extends { (...a: infer A1): infer R1, (...a: infer A2): infer R2 }
               ? { (...a: Instantiated<A1>): Instantiated<R1>
